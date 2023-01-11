@@ -37,7 +37,7 @@ import fs from 'fs';
         .json({ message: 'image_url is required or malformed' });
 
     try {
-      const filteredPath = await filterImageFromURL(imageUrl);
+      const filteredPath: string = await filterImageFromURL(imageUrl);
       fs.createReadStream(filteredPath).pipe(res);
 
       setTimeout(() => {
