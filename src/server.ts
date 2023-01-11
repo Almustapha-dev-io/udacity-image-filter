@@ -1,5 +1,5 @@
 require('dotenv').config();
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { filterImageFromURL, deleteLocalFiles } from './util/util';
 import fs from 'fs';
@@ -29,15 +29,15 @@ import fs from 'fs';
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
   /**************************************************************************** */
-  app.get('/filteredimage', async (req, res) => {
-    const { image_url } = req.query;
-    if (!image_url)
+  app.get('/filteredimage', async (req: Request, res: Response) => {
+    const imageUrl: string = req.query.image_url;
+    if (!imageUrl)
       return res
         .status(400)
         .json({ message: 'image_url is required or malformed' });
 
     try {
-      const filteredPath = await filterImageFromURL(image_url.toString());
+      const filteredPath = await filterImageFromURL(imageUrl);
       fs.createReadStream(filteredPath).pipe(res);
 
       setTimeout(() => {
